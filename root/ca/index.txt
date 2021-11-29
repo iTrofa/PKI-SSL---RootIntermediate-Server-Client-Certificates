@@ -1,0 +1,2 @@
+V	311122132654Z		1000	unknown	/C=FR/ST=France/O=Trofa Ltd/CN=Serveur CA/emailAddress=serveurCA@nahco3.com
+V	311122133338Z		1001	unknown	/C=FR/ST=France/O=Trofa Ltd/CN=Client_ca/emailAddress=clientca@nahco3.com

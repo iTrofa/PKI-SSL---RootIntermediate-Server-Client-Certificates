@@ -1,0 +1,56 @@
+server {
+	listen 443;
+	ssl on;
+	ssl_certificate /root/ca/intermediate/certs/nahco3.com.cert.pem;
+	ssl_certificate_key /root/ca/intermediate/private/nahco3.com.key.pem;
+	root /opt/secu;
+	server_name serv;
+
+        # client certificate
+        ssl_client_certificate /root/ssl-bundle.crt;
+        # ssl_client_certificate /root/ca/intermediate/certs/intermediate_client.cert.pem;
+	ssl_verify_depth 2;
+	# make verification optional, so we can display a 403 message to those
+        # who fail authentication
+        ssl_verify_client optional;
+	access_log /var/log/nginx/nginx.vhost.access.log;
+	error_log /var/log/nginx/nginx.vhost.error.log debug;
+	location / {
+		root /opt/secu/;
+		index index.html;	
+	}
+
+	location /accueil.html {	
+		root /opt/secu/;
+		index accueil.html;
+	}
+		
+	location /platform.html {
+  		if ($ssl_client_verify != SUCCESS) {
+       		 	return 403;
+		}
+            	root /opt/secu/;
+		index platform.html;
+	}
+	location /prof.html {
+  		if ($ssl_client_verify != SUCCESS) {
+       		 	return 403;
+		}
+		if ($ssl_client_fingerprint != "8906032c5b17f2b37f8b5d45b1dad46e5f154a3e") {
+			return 403;	
+		}
+            	root /opt/secu/;
+		index prof.html;
+	}
+  	location /student.html {
+                if ($ssl_client_verify != SUCCESS) {
+                        return 403;
+                }
+        	if ($ssl_client_fingerprint != "24c2e8b805e71824e47f2ee9ebe681eea88d299d") {
+                        return 403;
+                }
+                root /opt/secu/;
+                index student.html;
+         }
+
+}
